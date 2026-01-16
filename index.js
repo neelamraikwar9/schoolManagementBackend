@@ -1,4 +1,3 @@
-
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -28,7 +27,14 @@ app.post("/students", async (req, res) => {
   const { name, age, gender, grade, marks, attendance } = req.body;
 
   try {
-    const student = new Student({ name, age, grade, gender, marks, attendance });
+    const student = new Student({
+      name,
+      age,
+      grade,
+      gender,
+      marks,
+      attendance,
+    });
     await student.save();
     res.status(201).json(student);
   } catch (error) {
@@ -44,7 +50,7 @@ app.put("/students/:id", async (req, res) => {
     const updatedStudent = await Student.findByIdAndUpdate(
       studentId,
       updatedStudentData,
-      { new: true },
+      { new: true }
     );
 
     if (!updatedStudent) {
@@ -62,18 +68,16 @@ app.delete("/students/:id", async (req, res) => {
   const studentId = req.params.id;
 
   try {
-    const deletedStudent = await Student.findByIdAndRemove(studentId);
+    const deletedStudent = await Student.findByIdAndDelete(studentId);
 
     if (!deletedStudent) {
       return res.status(404).json({ error: "Student not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "Student deleted successfully",
-        student: deletedStudent,
-      });
+    res.status(200).json({
+      message: "Student deleted successfully",
+      student: deletedStudent,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
